@@ -1,8 +1,7 @@
-from ..Veiculos import Veiculos
-from ..Cliente  import Clientes
+from .Veiculos import Veiculos
+from .cliente  import Clientes
 
 class Concessionaria: 
-    
     def __init__(self, nome: str):
         self.nome = nome
         self.estoque = []  

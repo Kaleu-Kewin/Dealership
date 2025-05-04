@@ -1,6 +1,6 @@
-from .Cliente        import Clientes
-from .Concessionaria import Concessionaria
-from .Contato        import Contato
+from .cliente        import Clientes
+from .concessionaria import Concessionaria
+from .contato        import Contato
 from .Enum           import Cores
-from .Pessoa         import Pessoa
+from .pessoa         import Pessoa
 from .Veiculos       import Veiculos, Carro
