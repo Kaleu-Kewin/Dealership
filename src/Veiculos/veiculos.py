@@ -8,7 +8,7 @@ class Veiculos(ABC): # classe abstrata
         self.marca  = marca
         self.ano    = ano
         self.cor    = cor
-        self.preco  = preco
+        self.preco  = Decimal(preco)
         
     @abstractmethod
     def exibir_informacoes(self):
