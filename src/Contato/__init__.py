@@ -1,0 +1,1 @@
+from .contato import Contato
