@@ -1,1 +1,1 @@
-from .Enum import Cores
+from .enum import Cores

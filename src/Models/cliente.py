@@ -1,8 +1,8 @@
-from typing     import List, Optional
-from decimal    import Decimal
-from .pessoa    import Pessoa
-from .contato   import Contato
-from .Veiculos  import Veiculos
+from typing   import List, Optional
+from decimal  import Decimal
+from .pessoa  import Pessoa
+from .contato import Contato
+from .Veiculos import Veiculos
 
 class Clientes(Pessoa):
     def __init__(self, nome: str, idade: int, contato: Contato, credito: Decimal, veiculos: Optional[List[Veiculos]] = None):

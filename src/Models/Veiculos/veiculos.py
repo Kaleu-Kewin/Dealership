@@ -1,6 +1,6 @@
-from abc     import ABC, abstractmethod
-from decimal import Decimal
-from ..Enum  import Cores
+from abc      import ABC, abstractmethod
+from decimal  import Decimal
+from src.Enum import Cores
 
 class Veiculos(ABC): # classe abstrata
     def __init__(self, modelo: str, marca: str, ano: int, cor: Cores, preco: Decimal):
