@@ -2,32 +2,56 @@ import os
 import logging
 from logging import FileHandler, Formatter, Filter, getLogger
 
-CAMINHO_LOGS = "src/Logs"
-os.makedirs(CAMINHO_LOGS, exist_ok=True)
+class GerenciadorLogs:
+    CAMINHO_LOGS = "src/Logs"
+    FORMATO_LOG  = Formatter('%(asctime)s - %(levelname)s - %(message)s')
 
-FORMATO_LOG = Formatter('%(asctime)s - %(levelname)s - %(message)s')
+    class FiltroErro(Filter):
+        def filter(self, record):
+            return record.levelno >= logging.WARNING
 
-class FiltroExecucao(Filter):
-    def filter(self, record):
-        return record.levelno < logging.ERROR
+    def __init__(self, nome_logger: str = 'concessionaria_logger'):
+        self.logger = getLogger(nome_logger)
+        self._criar_diretorio_logs()
+        self._configurar_logger()
 
-class FiltroErro(Filter):
-    def filter(self, record):
-        return record.levelno >= logging.ERROR
+    def _criar_diretorio_logs(self):
+        os.makedirs(self.CAMINHO_LOGS, exist_ok=True)
 
-def criar_handler(caminho: str, nivel: int, filtro: Filter) -> FileHandler:
-    handler = FileHandler(caminho, encoding='utf-8')
-    handler.setLevel(nivel)
-    handler.setFormatter(FORMATO_LOG)
-    handler.addFilter(filtro)
-    return handler
+    def _criar_handler(self, caminho: str, nivel: int, filtro: Filter = None) -> FileHandler:
+        handler = FileHandler(caminho, encoding='utf-8')
+        handler.setLevel(nivel)
+        handler.setFormatter(self.FORMATO_LOG)
+        
+        if filtro:
+            handler.addFilter(filtro)
+        return handler
 
-handler_execucao = criar_handler(f"{CAMINHO_LOGS}/execution.log", logging.INFO, FiltroExecucao())
-handler_erro     = criar_handler(f"{CAMINHO_LOGS}/errors.log", logging.ERROR, FiltroErro())
+    def _configurar_logger(self):
+        self.logger.setLevel(logging.DEBUG)
 
-logger = getLogger('concessionaria_logger')
-logger.setLevel(logging.DEBUG)
+        if not self.logger.hasHandlers():
+            handler_execucao = self._criar_handler(f"{self.CAMINHO_LOGS}/execution.log", logging.DEBUG)
+            handler_erro     = self._criar_handler(f"{self.CAMINHO_LOGS}/errors.log", logging.ERROR, self.FiltroErro())
 
-if not logger.hasHandlers():
-    logger.addHandler(handler_execucao)
-    logger.addHandler(handler_erro)
+            self.logger.addHandler(handler_execucao)
+            self.logger.addHandler(handler_erro)
+
+    def obter_logger(self):
+        return self.logger
+    
+def log(self, nivel: int, mensagem: str):
+    logs = {
+        logging.DEBUG    : self.logger.debug,
+        logging.INFO     : self.logger.info,
+        logging.WARNING  : self.logger.warning,
+        logging.ERROR    : self.logger.error,
+        logging.CRITICAL : self.logger.critical
+    }
+    try:
+        logs[nivel](mensagem)
+    except KeyError:
+        raise ValueError("Nível de log inválido.")
+
+gerenciador_logs = GerenciadorLogs()
+logger = gerenciador_logs.obter_logger()

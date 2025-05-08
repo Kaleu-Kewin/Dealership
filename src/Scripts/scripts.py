@@ -1,0 +1,57 @@
+import os
+from src.Database import Database
+from dotenv       import load_dotenv
+
+def criar_tabelas():
+    load_dotenv()
+    
+    db = Database(  
+        os.getenv("DB_HOST"),
+        os.getenv("DB_NAME"), 
+        os.getenv("DB_USER"), 
+        os.getenv("DB_PASSWORD"), 
+        os.getenv("DB_PORT")
+    )
+    
+    db.conectar()
+    try:
+        db.criar_tabela(
+            "CLIENTES",
+            {
+                "CLI_CODIGO"          : "SERIAL PRIMARY KEY",
+                "CLI_NOME"            : "VARCHAR(100) NOT NULL",
+                "CLI_CPF"             : "VARCHAR(11) NOT NULL UNIQUE",
+                "CLI_EMAIL"           : "VARCHAR(100) NOT NULL UNIQUE",
+                "CLI_TELEFONE"        : "VARCHAR(15) NOT NULL",
+                "CLI_DATA_NASCIMENTO" : "DATE NOT NULL",
+                "CLI_CEP"             : "VARCHAR(8) NOT NULL",
+                "CLI_STATUS"          : "VARCHAR(10) NOT NULL CHECK (CLI_STATUS IN ('ATIVO', 'INATIVO'))",
+            }
+        )
+        
+        db.criar_tabela(
+            "VEICULOS",
+            {
+                "VEI_CODIGO"     : "SERIAL PRIMARY KEY",
+                "VEI_MARCA"      : "VARCHAR(50) NOT NULL",
+                "VEI_MODELO"     : "VARCHAR(50) NOT NULL",
+                "VEI_ANO"        : "INTEGER NOT NULL",
+                "VEI_PRECO"      : "DECIMAL(10, 2) NOT NULL",
+                "VEI_COR"        : "VARCHAR(20) NOT NULL",
+                "VEI_QUANTIDADE" : "INTEGER NOT NULL",
+                "VEI_PLACA"      : "VARCHAR(7) NOT NULL UNIQUE",
+                "TIPO_VEICULO"   : "VARCHAR(20) NOT NULL CHECK (TIPO_VEICULO IN ('CARRO', 'MOTO'))"
+            }
+        )
+        
+        db.criar_tabela(
+            "CLIENTES_VEICULOS",
+            {
+                "CLI_CODIGO"  : "INTEGER REFERENCES CLIENTES(CLI_CODIGO) ON DELETE CASCADE",
+                "VEI_CODIGO"  : "INTEGER REFERENCES VEICULOS(VEI_CODIGO) ON DELETE CASCADE",
+                "PRIMARY KEY" : "(CLI_CODIGO, VEI_CODIGO)"
+            }
+        )
+        
+    finally:
+        db.desconectar()

@@ -1,0 +1,1 @@
+from .scripts import criar_tabelas
