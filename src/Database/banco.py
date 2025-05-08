@@ -1,7 +1,5 @@
 import psycopg2
-import logging
-
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+from src.Logs.logger import logger 
 
 class Database:
     def __init__(self, host, database, user, password, port):
@@ -14,43 +12,42 @@ class Database:
         self.cursor     = None
 
     def conectar(self):
-        logging.info(f"Iniciando o script de conexão ao banco de dados.")
-        logging.info(f"Tentando conectar ao banco de dados {self.database} em {self.host}:{self.port}...")
-        logging.info(f"Usuário: {self.user}")
+        logger.info(f"Iniciando o script de conexão ao banco de dados.")
+        logger.info(f"Tentando conectar ao banco de dados {self.database} em {self.host}:{self.port}...")
         try:
             self.connection = psycopg2.connect(
-                host=self.host,
-                database=self.database,
-                user=self.user,
-                password=self.password,
-                port=self.port
+                host     = self.host,
+                database = self.database,
+                user     = self.user,
+                password = self.password,
+                port     = self.port
             )
             self.cursor = self.connection.cursor()  
-            logging.info("Conexão estabelecida com sucesso.")
+            logger.info("Conexão estabelecida com sucesso.")
             return self.connection
         
         except Exception as erro:
-            logging.error(f"Erro ao conectar: {erro}")
+            logger.error(f"Erro ao conectar: {erro}")
             raise
 
     def desconectar(self):
         if self.connection:
             self.cursor.close()  
             self.connection.close() 
-            logging.info("Conexão e cursor fechados com sucesso.")
+            logger.info("Conexão fechada com sucesso.")
         else:
-            logging.warning("Nenhuma conexão ativa para fechar.")
+            logger.warning("Nenhuma conexão ativa para fechar.")
     
     def executar_script(self, script):
         if not self.cursor:
-            logging.error("Erro: Conexão não estabelecida ou cursor não disponível.")
+            logger.error("Erro: Conexão não estabelecida ou cursor não disponível.")
             return
         try:
             self.cursor.execute(script)
             self.connection.commit()
-            logging.info("Script executado com sucesso.")
+            logger.info("Script executado com sucesso.")
         except Exception as e:
-            logging.error(f"Erro ao executar o script: {e}")
+            logger.error(f"Erro ao executar o script: {e}")
             self.connection.rollback()
     
     def adicionar_coluna(self, tabela, nome_campo, tipo_campo):
