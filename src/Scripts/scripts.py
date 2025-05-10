@@ -1,6 +1,6 @@
+from dotenv     import load_dotenv
+from ..Database import Database
 import os
-from src.Database import Database
-from dotenv       import load_dotenv
 
 def criar_tabelas():
     load_dotenv()
@@ -20,11 +20,11 @@ def criar_tabelas():
             {
                 "CLI_CODIGO"          : "SERIAL PRIMARY KEY",
                 "CLI_NOME"            : "VARCHAR(100) NOT NULL",
-                "CLI_CPF"             : "VARCHAR(11) NOT NULL UNIQUE",
+                "CLI_CPF"             : "VARCHAR(14) NOT NULL UNIQUE",
                 "CLI_EMAIL"           : "VARCHAR(100) NOT NULL UNIQUE",
-                "CLI_TELEFONE"        : "VARCHAR(15) NOT NULL",
+                "CLI_TELEFONE"        : "VARCHAR(18) NOT NULL",
                 "CLI_DATA_NASCIMENTO" : "DATE NOT NULL",
-                "CLI_CEP"             : "VARCHAR(8) NOT NULL",
+                "CLI_CEP"             : "VARCHAR(10) NOT NULL",
                 "CLI_STATUS"          : "VARCHAR(10) NOT NULL CHECK (CLI_STATUS IN ('ATIVO', 'INATIVO'))",
             }
         )

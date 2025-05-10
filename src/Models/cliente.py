@@ -1,28 +1,65 @@
-from typing   import List, Optional
-from decimal  import Decimal
-from .pessoa  import Pessoa
-from .contato import Contato
-from .Veiculos import Veiculos
+from ..Utils import *
+from ..Enum  import Status
+from ..Logs  import GerenciadorLogs
+from ..Instances.db_instance import db
 
-class Clientes(Pessoa):
-    def __init__(self, nome: str, idade: int, contato: Contato, credito: Decimal, veiculos: Optional[List[Veiculos]] = None):
-        super().__init__(nome, idade)
+class Clientes():
+    def __init__(self, nome, cpf, email, telefone, data_nascimento, cep, status: Status):
+        self.nome            = nome
+        self.cpf             = cpf
+        self.email           = email
+        self.telefone        = telefone
+        self.data_nascimento = data_nascimento
+        self.cep             = cep
+        self.status          = status
+        self.logger          = GerenciadorLogs().obter_logger()
         
-        self.contato  = contato
-        self.credito  = credito
-        self.veiculos = veiculos if veiculos is not None else []
-    
-    def contatos_vinculados(self):
-        print(f'Contatos do cliente "{self.nome}":')
-        self.contato.contatos_vinculados()
+    def cadastrar(self):     
+        db.iniciar_transacao()
+        try:
+            script = """
+                INSERT INTO CLIENTES (
+                    CLI_NOME,
+                    CLI_CPF, 
+                    CLI_EMAIL,
+                    CLI_TELEFONE, 
+                    CLI_DATA_NASCIMENTO,
+                    CLI_CEP, 
+                    CLI_STATUS
+                ) 
+                VALUES (
+                    %s, 
+                    %s, 
+                    %s, 
+                    %s, 
+                    %s, 
+                    %s, 
+                    %s
+                );
+            """
+            values = (self.nome, self.cpf, self.email, self.telefone, self.data_nascimento, self.cep, self.status)
 
-    def veiculos_vinculados(self):
-        if self.veiculos:
-            print(f'Veículos vinculados ao cliente "{self.nome}":')
-            for v in self.veiculos:
-                v.exibir_informacoes()
+            if db.executar_script(script, values):
+                print('Cliente cadastrado com sucesso!') 
+            else:
+                print('Erro ao cadastrar cliente!')
+                self.logger.error(f'Erro ao cadastrar cliente.')
+                db.rollback()
+
+        except Exception as e:
+            db.rollback()
+            self.logger.error(f'Erro ao cadastrar cliente. {e}')
+        
+    @staticmethod
+    def listar():
+        titulo('Listando Clientes')
+        
+        script = 'SELECT * FROM CLIENTES'
+        db.executar_script(script)
+        clientes = db.cursor.fetchall()
+
+        if clientes:
+            for cliente in clientes:
+                print(f'Código: {cliente[0]}, Nome: {cliente[1]}, CPF: {cliente[2]}, Status: {cliente[7]}')
         else:
-            print('Nenhum veiculo vinculado!')
-            
-    def comprar_veiculo(self, veiculo: Veiculos):
-        self.veiculos.append(veiculo)
+            print('Nenhum cliente encontrado.')

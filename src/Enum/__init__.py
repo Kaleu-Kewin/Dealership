@@ -1,1 +1,1 @@
-from .enum import Cores
+from .enum import Cores, Status

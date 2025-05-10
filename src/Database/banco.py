@@ -1,5 +1,5 @@
 import psycopg2
-from src.Logs.logger import GerenciadorLogs
+from ..Logs import GerenciadorLogs
 
 class Database:
     def __init__(self, host, database, user, password, port):
@@ -10,9 +10,7 @@ class Database:
         self.port       = port
         self.connection = None
         self.cursor     = None
-        
-        gerenciador_logs = GerenciadorLogs()
-        self.logger      = gerenciador_logs.obter_logger()
+        self.logger     = GerenciadorLogs().obter_logger()
 
     def conectar(self):
         self.logger.info(f"Iniciando o script de conexão ao banco de dados.")
@@ -40,18 +38,42 @@ class Database:
         else:
             self.logger.warning("Nenhuma conexão ativa para fechar.")
     
-    def executar_script(self, script):
+    def iniciar_transacao(self):
+        if self.connection:
+            self.connection.autocommit = False
+            self.logger.info("Transação iniciada.")
+        else:
+            self.logger.error("Conexão não estabelecida para iniciar transação.")
+
+    def commit(self):
+        if self.connection:
+            self.connection.commit()
+            self.connection.autocommit = True
+            self.logger.info("Transação confirmada, [COMMIT].")
+
+    def rollback(self):
+        if self.connection:
+            self.connection.rollback()
+            self.connection.autocommit = True
+            self.logger.info("Transação cancelada, [ROLLBACK].")
+    
+    def executar_script(self, script, values = None):
         if not self.cursor:
             self.logger.error("Erro: Conexão não estabelecida ou cursor não disponível.")
             return
         try:
-            self.cursor.execute(script)
-            self.connection.commit()
+            self.cursor.execute(script, values)
+            self.commit()
+            return True
         except Exception as e:
             self.logger.error(f"Erro ao executar o script: {e}")
-            self.connection.rollback()
+            self.rollback()
+            return False
 
-    def criar_tabela(self, nome_tabela, campos):
+    def buscar(self):
+        return self.cursor.fetchall()
+
+    def criar_tabela(self, nome_tabela: str, campos: dict[str, str]) -> None:
         campos_str = ", ".join(
             [f"{campo} {tipo}" for campo, tipo in campos.items()]
         )

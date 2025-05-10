@@ -2,7 +2,7 @@ from abc      import ABC, abstractmethod
 from decimal  import Decimal
 from src.Enum import Cores
 
-class Veiculos(ABC): # classe abstrata
+class Veiculos(ABC):
     def __init__(self, modelo: str, marca: str, ano: int, cor: Cores, preco: Decimal):
         self.modelo = modelo
         self.marca  = marca
