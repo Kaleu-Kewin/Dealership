@@ -10,7 +10,7 @@ class TelaCliente(Ui):
     def cadastrar_cliente(self):
         titulo('Insira as informações do cliente')
 
-        perguntas = [
+        respostas = [
             perguntar('Nome'),
             perguntar('CPF'),
             perguntar('Email'),
@@ -21,13 +21,13 @@ class TelaCliente(Ui):
         ]
 
         dados = {
-            "nome"            : perguntas[0],
-            "cpf"             : perguntas[1],
-            "email"           : perguntas[2],
-            "telefone"        : perguntas[3],
-            "data_nascimento" : perguntas[4],
-            "cep"             : perguntas[5],
-            "status"          : perguntas[6],
+            "nome"            : respostas[0],
+            "cpf"             : respostas[1],
+            "email"           : respostas[2],
+            "telefone"        : respostas[3],
+            "data_nascimento" : respostas[4],
+            "cep"             : respostas[5],
+            "status"          : respostas[6],
         }
 
         cliente = Clientes(
@@ -82,6 +82,22 @@ class TelaCliente(Ui):
             dados["status"]
         )
         cliente.editar(codigo_cliente)
+        pressione_enter()
+        
+    def excluir_cliente(self):
+        codigo_cliente     = perguntar('Digite o código do cliente que deseja excluir')
+        cliente_encontrado = Clientes.buscar(codigo_cliente)
+
+        if cliente_encontrado:
+            titulo(f'Cliente encontrado: {cliente_encontrado[1]}'.upper())
+            resposta = perguntar('Tem certeza que deseja excluir? [S/N]').strip().lower()
+
+            if resposta and resposta[0] == 's':
+                Clientes.excluir(codigo_cliente)
+            else:
+                print('\nExclusão cancelada.')
+        else:
+            print('\nCliente não encontrado.')
         pressione_enter()
            
     def exibir(self):
