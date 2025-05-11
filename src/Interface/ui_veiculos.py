@@ -2,6 +2,21 @@ from ..Utils import montar_opcoes, limpar_terminal, titulo
 from .ui     import Ui
 
 class TelaVeiculo(Ui):
+    def __init__(self):
+        pass
+
+    def cadastrar_veiculo(self):
+        pass
+    
+    def listar_veiculos(self):
+        pass
+    
+    def editar_veiculo(self):
+        pass
+    
+    def excluir_veiculo(self):
+        pass
+    
     def exibir(self):
         limpar_terminal()
         
