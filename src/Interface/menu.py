@@ -1,6 +1,7 @@
 from ..Utils      import montar_opcoes, limpar_terminal, titulo
 from .ui_cliente  import TelaCliente
 from .ui_veiculos import TelaVeiculo
+from .ui_vendas   import TelaVenda
 from .ui          import Ui
 
 class Menu(Ui):

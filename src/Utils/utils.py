@@ -1,5 +1,9 @@
 import os
+from ..Enum     import Logs
 from InquirerPy import inquirer
+from ..Logs     import GerenciadorLogs
+
+log = GerenciadorLogs()
 
 def limpar_terminal() -> None:
         os.system('cls' if os.name == 'nt' else 'clear')
@@ -25,3 +29,7 @@ def perguntar(texto: str) -> str:
 
 def selecionar(texto: str, opcoes: list[str]) -> str:
     return inquirer.select(message=texto, choices=opcoes).execute()
+
+def pressione_enter():
+    input('\nPressione Enter para continuar...')
+    limpar_terminal()

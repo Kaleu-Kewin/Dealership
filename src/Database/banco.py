@@ -61,17 +61,16 @@ class Database:
         if not self.cursor:
             self.logger.error("Erro: Conexão não estabelecida ou cursor não disponível.")
             return
+        
         try:
             self.cursor.execute(script, values)
             self.commit()
             return True
+        
         except Exception as e:
             self.logger.error(f"Erro ao executar o script: {e}")
             self.rollback()
             return False
-
-    def buscar(self):
-        return self.cursor.fetchall()
 
     def criar_tabela(self, nome_tabela: str, campos: dict[str, str]) -> None:
         campos_str = ", ".join(

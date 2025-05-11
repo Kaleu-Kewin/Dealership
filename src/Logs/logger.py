@@ -10,8 +10,8 @@ class GerenciadorLogs:
         def filter(self, record):
             return record.levelno >= logging.WARNING
 
-    def __init__(self, nome_logger: str = 'concessionaria_logger'):
-        self.logger = getLogger(nome_logger)
+    def __init__(self):
+        self.logger = getLogger('logger')
         self._criar_diretorio_logs()
         self._configurar_logger()
 
@@ -32,7 +32,7 @@ class GerenciadorLogs:
 
         if not self.logger.hasHandlers():
             handler_execucao = self._criar_handler(f"{self.CAMINHO_LOGS}/execution.log", logging.DEBUG)
-            handler_erro     = self._criar_handler(f"{self.CAMINHO_LOGS}/errors.log", logging.ERROR, self.FiltroErro())
+            handler_erro     = self._criar_handler(f"{self.CAMINHO_LOGS}/errors.log"   , logging.ERROR, self.FiltroErro())
 
             self.logger.addHandler(handler_execucao)
             self.logger.addHandler(handler_erro)
@@ -40,18 +40,15 @@ class GerenciadorLogs:
     def obter_logger(self):
         return self.logger
     
-def log(self, nivel: int, mensagem: str):
-    logs = {
-        logging.DEBUG    : self.logger.debug,
-        logging.INFO     : self.logger.info,
-        logging.WARNING  : self.logger.warning,
-        logging.ERROR    : self.logger.error,
-        logging.CRITICAL : self.logger.critical
-    }
-    try:
-        logs[nivel](mensagem)
-    except KeyError:
-        raise ValueError("Nível de log inválido.")
-
-gerenciador_logs = GerenciadorLogs()
-logger = gerenciador_logs.obter_logger()
+    def log(self, nivel: int, mensagem: str):
+        logs = {
+            logging.DEBUG    : self.logger.debug,
+            logging.INFO     : self.logger.info,
+            logging.WARNING  : self.logger.warning,
+            logging.ERROR    : self.logger.error,
+            logging.CRITICAL : self.logger.critical
+        }
+        try:
+            logs[nivel](mensagem)
+        except KeyError:
+            raise ValueError("Nível de log inválido.")

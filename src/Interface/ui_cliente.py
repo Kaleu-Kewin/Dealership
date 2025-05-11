@@ -40,10 +40,50 @@ class TelaCliente(Ui):
             dados["status"]
         )
         cliente.cadastrar()
+        pressione_enter()
         
     def listar_clientes(self):
-        Clientes.listar()  
+        Clientes.listar() 
+        pressione_enter()
         
+    def editar_cliente(self):
+        codigo_cliente     = perguntar('Digite o código do cliente que deseja alterar')
+        cliente_encontrado = Clientes.buscar(codigo_cliente)
+
+        titulo(f'Cliente encontrado: {cliente_encontrado[1]}'.upper())
+
+        respostas = [
+            perguntar(f'Nome atual: {cliente_encontrado[1]}\n  Novo nome:'),
+            perguntar(f'CPF atual: {cliente_encontrado[2]}\n  Novo CPF:'),
+            perguntar(f'E-mail atual: {cliente_encontrado[3]}\n  Novo E-mail:'),
+            perguntar(f'Telefone atual: {cliente_encontrado[4]}\n  Novo Telefone:'),
+            perguntar(f'Data de Nascimento atual: {cliente_encontrado[5]}\n  Nova Data de Nascimento [AAAA-MM-DD]:'),
+            perguntar(f'CEP atual: {cliente_encontrado[6]}\n  Novo CEP:'),
+            selecionar(f'Status atual: {cliente_encontrado[7]}\n  Novo Status (ATIVO ou INATIVO):', ['ATIVO', 'INATIVO'])
+        ]
+
+        dados = {
+            "nome"            : respostas[0] or cliente_encontrado[1],
+            "cpf"             : respostas[1] or cliente_encontrado[2],
+            "email"           : respostas[2] or cliente_encontrado[3],
+            "telefone"        : respostas[3] or cliente_encontrado[4],
+            "data_nascimento" : respostas[4] or cliente_encontrado[5],
+            "cep"             : respostas[5] or cliente_encontrado[6],
+            "status"          : respostas[6] or cliente_encontrado[7]
+        }
+
+        cliente = Clientes(
+            dados["nome"], 
+            dados["cpf"], 
+            dados["email"],
+            dados["telefone"], 
+            dados["data_nascimento"],
+            dados["cep"], 
+            dados["status"]
+        )
+        cliente.editar(codigo_cliente)
+        pressione_enter()
+           
     def exibir(self):
         limpar_terminal()
         
