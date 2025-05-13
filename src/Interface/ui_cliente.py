@@ -1,12 +1,11 @@
-from ..Utils    import *
+from src.Utils  import *
 from .ui        import Ui
-from ..Models   import Clientes
-from ..Enum     import Status as s
+from src.Models import Clientes
 
-class TelaCliente(Ui): 
+class TelaCliente(Ui):
     def __init__(self):
         pass
-    
+
     def cadastrar_cliente(self):
         titulo('Insira as informações do cliente')
 
@@ -31,21 +30,21 @@ class TelaCliente(Ui):
         }
 
         cliente = Clientes(
-            dados["nome"], 
-            dados["cpf"], 
+            dados["nome"],
+            dados["cpf"],
             dados["email"],
-            dados["telefone"], 
+            dados["telefone"],
             dados["data_nascimento"],
-            dados["cep"], 
+            dados["cep"],
             dados["status"]
         )
         cliente.cadastrar()
         pressione_enter()
-        
+
     def listar_clientes(self):
-        Clientes.listar() 
+        Clientes.listar()
         pressione_enter()
-        
+
     def editar_cliente(self):
         codigo_cliente     = perguntar('Digite o código do cliente que deseja alterar')
         cliente_encontrado = Clientes.buscar(codigo_cliente)
@@ -73,17 +72,17 @@ class TelaCliente(Ui):
         }
 
         cliente = Clientes(
-            dados["nome"], 
-            dados["cpf"], 
+            dados["nome"],
+            dados["cpf"],
             dados["email"],
-            dados["telefone"], 
+            dados["telefone"],
             dados["data_nascimento"],
-            dados["cep"], 
+            dados["cep"],
             dados["status"]
         )
         cliente.editar(codigo_cliente)
         pressione_enter()
-        
+
     def excluir_cliente(self):
         codigo_cliente     = perguntar('Digite o código do cliente que deseja excluir')
         cliente_encontrado = Clientes.buscar(codigo_cliente)
@@ -99,10 +98,10 @@ class TelaCliente(Ui):
         else:
             print('\nCliente não encontrado.')
         pressione_enter()
-           
+
     def exibir(self):
         limpar_terminal()
-        
+
         titulo('Tela de Clientes')
         opcao = montar_opcoes(
             "1. Cadastrar Cliente",
@@ -111,9 +110,9 @@ class TelaCliente(Ui):
             "4. Excluir Cliente",
             "5. Voltar ao Menu Principal"
         )
-        
+
         limpar_terminal()
-        
+
         match opcao:
             case 1:
                 self.cadastrar_cliente()

@@ -1,6 +1,5 @@
 from ..Utils  import *
 from ..Enum   import Status
-from tabulate import tabulate
 from ..Logs   import GerenciadorLogs
 from ..Instances.db_instance import db
 
@@ -20,35 +19,21 @@ class Clientes():
         db.iniciar_transacao()
         self.logger.info(f'Iniciando cadastro de cliente.')
         try:
-            script = """
-                INSERT INTO CLIENTES (
-                    CLI_NOME,
-                    CLI_CPF, 
-                    CLI_EMAIL,
-                    CLI_TELEFONE, 
-                    CLI_DATA_NASCIMENTO,
-                    CLI_CEP, 
-                    CLI_STATUS
-                ) 
-                VALUES (
-                    %s, 
-                    %s, 
-                    %s, 
-                    %s, 
-                    %s, 
-                    %s, 
-                    %s
-                );
-            """
-            values = (self.nome, self.cpf, self.email, self.telefone, self.data_nascimento, self.cep, self.status)
-
-            if db.executar_script(script, values):
-                    print('\nCliente cadastrado com sucesso!') 
-                    self.logger.info(f'O Cliente foi cadastrado com sucesso.')
+            if db.insert(
+                "CLIENTES",
+                {
+                    "CLI_NOME"            : self.nome,
+                    "CLI_CPF"             : self.cpf, 
+                    "CLI_EMAIL"           : self.email,
+                    "CLI_TELEFONE"        : self.telefone, 
+                    "CLI_DATA_NASCIMENTO" : self.data_nascimento,
+                    "CLI_CEP"             : self.cep, 
+                    "CLI_STATUS"          : self.status                   
+                }
+            ):
+                print_log_info('Cliente cadastrado com sucesso!')
             else:
-                print('\nErro ao cadastrar cliente!')
-                self.logger.error(f'Erro ao cadastrar cliente.')
-                db.rollback()
+                print_log_error('Erro ao cadastrar cliente.')
                 
         except Exception as e:
             db.rollback()
@@ -58,28 +43,25 @@ class Clientes():
         db.iniciar_transacao()
         self.logger.info(f'Iniciando atualização de cliente.')
         try:
-            script = """
-                UPDATE CLIENTES
-                SET 
-                    CLI_NOME            = %s,
-                    CLI_CPF             = %s, 
-                    CLI_EMAIL           = %s,
-                    CLI_TELEFONE        = %s, 
-                    CLI_DATA_NASCIMENTO = %s,
-                    CLI_CEP             = %s, 
-                    CLI_STATUS          = %s
-                WHERE CLI_CODIGO        = %s;
-            """
-            sets = (self.nome, self.cpf, self.email, self.telefone, self.data_nascimento, self.cep, self.status, codigo_cliente)
-
-            if db.executar_script(script, sets):
-                print('\nCliente atualizado com sucesso!') 
-                self.logger.info(f'O Cliente foi atualizado com sucesso.')
+            if db.update(
+                "CLIENTES",
+                {
+                    "CLI_NOME"            : self.nome,
+                    "CLI_CPF"             : self.cpf,
+                    "CLI_EMAIL"           : self.email,
+                    "CLI_TELEFONE"        : self.telefone,
+                    "CLI_DATA_NASCIMENTO" : self.data_nascimento,
+                    "CLI_CEP"             : self.cep,
+                    "CLI_STATUS"          : self.status
+                },
+                {
+                    "CLI_CODIGO"          : codigo_cliente
+                }
+            ):
+                print_log_info('Cliente editado com sucesso!')
             else:
-                print('\nErro ao atualizar cliente!')
-                self.logger.error(f'Erro ao atualizar cliente.')
-                db.rollback() 
-                    
+                print_log_error('Erro ao editar informações do cliente.')
+            
         except Exception as e:
             db.rollback()
             self.logger.error(f'Erro ao atualizar cliente. {e}')

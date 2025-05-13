@@ -1,10 +1,12 @@
-from src.Interface import Menu
+from src.Interface import Login
+from src.Utils     import tratar_erros
 from src.Scripts   import criar_tabelas
 
-def main(): 
+@tratar_erros
+def main():
     criar_tabelas()
-    menu = Menu()
-    menu.exibir()
+    login = Login()
+    login.exibir()
 
 if __name__ == "__main__":
     main()

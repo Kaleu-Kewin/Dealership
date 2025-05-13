@@ -1,6 +1,10 @@
-from .veiculos import Veiculos
-from src.Enum  import TipoVeiculo
+from src.Enum  import TipoVeiculo as t
+from .veiculos import Veiculos, VeiculosDAO
 
 class Moto(Veiculos):
     def __init__(self, modelo, marca, ano, preco, cor, quantidade, placa):
-        super().__init__(modelo, marca, ano, preco, cor, quantidade, placa, TipoVeiculo.MOTO)
+        super().__init__(modelo, marca, ano, preco, cor, quantidade, placa, str(t.MOTO))
+
+    def cadastrar(self):
+        moto = VeiculosDAO(self)
+        moto.cadastrar_veiculo()

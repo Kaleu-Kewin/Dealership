@@ -1,18 +1,21 @@
 from dotenv     import load_dotenv
 from ..Database import Database
+import hashlib
 import os
 
 def criar_tabelas():
     load_dotenv()
-    
-    db = Database(  
+
+    senha = hashlib.sha256('1'.encode()).hexdigest()
+
+    db = Database(
         os.getenv("DB_HOST"),
-        os.getenv("DB_NAME"), 
-        os.getenv("DB_USER"), 
-        os.getenv("DB_PASSWORD"), 
+        os.getenv("DB_NAME"),
+        os.getenv("DB_USER"),
+        os.getenv("DB_PASSWORD"),
         os.getenv("DB_PORT")
     )
-    
+
     db.conectar()
     try:
         db.criar_tabela(
@@ -28,14 +31,14 @@ def criar_tabelas():
                 "CLI_STATUS"          : "VARCHAR(10) NOT NULL CHECK (CLI_STATUS IN ('ATIVO', 'INATIVO'))",
             }
         )
-        
+
         db.criar_tabela(
             "VEICULOS",
             {
                 "VEI_CODIGO"     : "SERIAL PRIMARY KEY",
                 "VEI_MARCA"      : "VARCHAR(50) NOT NULL",
                 "VEI_MODELO"     : "VARCHAR(50) NOT NULL",
-                "VEI_ANO"        : "INTEGER NOT NULL",
+                "VEI_ANO"        : "VARCHAR(4) NOT NULL",
                 "VEI_PRECO"      : "DECIMAL(10, 2) NOT NULL",
                 "VEI_COR"        : "VARCHAR(20) NOT NULL",
                 "VEI_QUANTIDADE" : "INTEGER NOT NULL",
@@ -43,7 +46,7 @@ def criar_tabelas():
                 "TIPO_VEICULO"   : "VARCHAR(20) NOT NULL CHECK (TIPO_VEICULO IN ('CARRO', 'MOTO'))"
             }
         )
-        
+
         db.criar_tabela(
             "CLIENTES_VEICULOS",
             {
@@ -52,6 +55,23 @@ def criar_tabelas():
                 "PRIMARY KEY" : "(CLI_CODIGO, VEI_CODIGO)"
             }
         )
-        
+
+        db.criar_tabela(
+            "USUARIOS",
+            {
+                "USU_CODIGO" : "SERIAL PRIMARY KEY",
+                "USU_NOME"   : "VARCHAR(25) NOT NULL UNIQUE",
+                "USU_SENHA"  : "VARCHAR(255) NOT NULL"
+            }
+        )
+
+        db.insert(
+            "USUARIOS",
+            {
+                "USU_NOME"  : "ADMIN",
+                "USU_SENHA" : senha
+            }
+        )
+
     finally:
         db.desconectar()
