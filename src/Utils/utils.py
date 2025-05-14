@@ -1,7 +1,7 @@
 import os
 from decimal    import Decimal
 from InquirerPy import inquirer
-from src.Logs   import GerenciadorLogs
+from src.logs   import GerenciadorLogs
 
 log = GerenciadorLogs()
 

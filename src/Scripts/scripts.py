@@ -1,12 +1,12 @@
-from dotenv     import load_dotenv
-from ..Database import Database
+from src.database import Database
+from dotenv import load_dotenv
 import hashlib
 import os
 
 def criar_tabelas():
     load_dotenv()
 
-    senha = hashlib.sha256('1'.encode()).hexdigest()
+    senha = hashlib.sha256(os.getenv("SENHA").encode()).hexdigest()
 
     db = Database(
         os.getenv("DB_HOST"),

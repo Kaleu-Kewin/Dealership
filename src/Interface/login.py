@@ -1,5 +1,5 @@
-from src.Instances.db_instance import db
-from src.Utils import *
+from src.instances.db_instance import db
+from src.utils import *
 from .menu import Menu
 from .ui import Ui
 import hashlib

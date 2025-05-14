@@ -1,21 +1,21 @@
-from ..Utils import montar_opcoes, limpar_terminal, titulo
-from .ui     import Ui
+from src.utils import montar_opcoes, limpar_terminal, titulo
+from .ui import Ui
 
 class TelaVenda(Ui):
     def exibir(self):
         limpar_terminal()
-        
+
         titulo('Tela de Vendas')
-        
+
         opcao = montar_opcoes(
             "1. Realizar Venda",
             "2. Editar Venda",
             "3. Excluir Venda",
             "4. Voltar ao Menu Principal"
         )
-        
+
         limpar_terminal()
-        
+
         match opcao:
             case 1:
                 pass

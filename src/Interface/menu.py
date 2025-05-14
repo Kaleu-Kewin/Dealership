@@ -2,7 +2,7 @@ from .ui_cliente  import TelaCliente
 from .ui_veiculos import TelaVeiculo
 from .ui_vendas   import TelaVenda
 from .ui          import Ui
-from src.Utils    import *
+from src.utils    import *
 
 class Menu(Ui):
     def __init__(self):

@@ -1,7 +1,7 @@
 import psycopg2
-from ..Utils  import *
-from tabulate import tabulate
-from ..Logs   import GerenciadorLogs
+from src.utils import *
+from tabulate  import tabulate
+from src.logs  import GerenciadorLogs
 
 class Database:
     def __init__(self, host, database, user, password, port):
@@ -180,9 +180,9 @@ class Database:
         else:
             print('Nenhum registro encontrado.')
 
-    def listar_registros(self, nome_tabela: str, colunas: list, indices: list):
+    def listar_registros(self, nome_tabela: str, colunas: list, indices: list, campo_order_by: str = None):
         try:
-            self.executar_script(f'SELECT * FROM {nome_tabela} ORDER BY CLI_CODIGO')
+            self.executar_script(f'SELECT * FROM {nome_tabela} ORDER BY {campo_order_by}')
             registros = self.cursor.fetchall()
 
             if registros:

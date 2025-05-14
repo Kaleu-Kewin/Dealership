@@ -1,6 +1,6 @@
-from src.Utils  import *
+from src.utils  import *
 from .ui        import Ui
-from src.Models import Clientes
+from src.models import Clientes
 
 class TelaCliente(Ui):
     def __init__(self):

@@ -1,9 +1,9 @@
-from src.Instances.db_instance import db
+from src.instances.db_instance import db
 from src.Enum  import Cores, TipoVeiculo
-from src.Logs  import GerenciadorLogs
+from src.logs  import GerenciadorLogs
 from decimal   import Decimal
 from abc       import ABC
-from src.Utils import *
+from src.utils import *
 
 class Veiculos(ABC):
     def __init__(self, modelo: str, marca: str, ano: int, preco: Decimal, cor: Cores, quantidade: int, placa: str, tipo_veiculo: TipoVeiculo):

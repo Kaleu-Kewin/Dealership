@@ -1,5 +1,5 @@
 import os
-from ..Database import Database
+from src.database import Database
 
 db = Database(
     os.getenv("DB_HOST"),
