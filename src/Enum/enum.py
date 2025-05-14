@@ -9,17 +9,17 @@ class Cores(Enum):
 
     def __str__(self) -> str:
         return self.value
-    
+
 class Status(Enum):
     ATIVO   = 'ATIVO'
     INATIVO = 'INATIVO'
 
     def __str__(self) -> str:
         return self.value
-    
+
 class TipoVeiculo(Enum):
     CARRO = 'CARRO'
-    MOTO  = 'MOTO' 
-    
+    MOTO  = 'MOTO'
+
     def __str__(self) -> str:
         return self.value
