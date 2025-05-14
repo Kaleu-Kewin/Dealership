@@ -19,7 +19,4 @@ class Status(Enum):
     
 class TipoVeiculo(Enum):
     CARRO = 'CARRO'
-    MOTO  = 'MOTO' 
-    
-    def __str__(self) -> str:
-        return self.value
+    MOTO  = 'MOTO'
