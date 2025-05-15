@@ -6,6 +6,7 @@ import os
 def criar_tabelas():
     load_dotenv()
 
+    nome  = os.getenv("NOME")
     senha = hashlib.sha256(os.getenv("SENHA").encode()).hexdigest()
 
     db = Database(
@@ -36,8 +37,8 @@ def criar_tabelas():
             "VEICULOS",
             {
                 "VEI_CODIGO"     : "SERIAL PRIMARY KEY",
-                "VEI_MARCA"      : "VARCHAR(50) NOT NULL",
                 "VEI_MODELO"     : "VARCHAR(50) NOT NULL",
+                "VEI_MARCA"      : "VARCHAR(50) NOT NULL",
                 "VEI_ANO"        : "VARCHAR(4) NOT NULL",
                 "VEI_PRECO"      : "DECIMAL(10, 2) NOT NULL",
                 "VEI_COR"        : "VARCHAR(20) NOT NULL",
@@ -68,7 +69,7 @@ def criar_tabelas():
         db.insert(
             "USUARIOS",
             {
-                "USU_NOME"  : "ADMIN",
+                "USU_NOME"  : nome,
                 "USU_SENHA" : senha
             }
         )

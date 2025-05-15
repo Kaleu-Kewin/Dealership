@@ -45,3 +45,31 @@ class VeiculosDAO:
         except Exception as e:
             db.rollback()
             self.logger.error(f'Erro ao cadastrar Veiculo. {e}')
+
+    def editar_veiculo(self, codigo_veiculo: int):
+        db.iniciar_transacao()
+        self.logger.info(f'Iniciando atualização de veiculo.')
+        try:
+            if db.update(
+                "VEICULOS",
+                {
+                    "VEI_MODELO"     : self.veiculo.modelo,
+                    "VEI_MARCA"      : self.veiculo.marca,
+                    "VEI_ANO"        : self.veiculo.ano,
+                    "VEI_PRECO"      : self.veiculo.preco,
+                    "VEI_COR"        : self.veiculo.cor,
+                    "VEI_QUANTIDADE" : self.veiculo.quantidade,
+                    "VEI_PLACA"      : self.veiculo.placa,
+                    "TIPO_VEICULO"   : self.veiculo.tipo_veiculo
+                },
+                {
+                    "VEI_CODIGO"     : codigo_veiculo
+                }
+            ):
+                print_log_info('Veiculo editado com sucesso!')
+            else:
+                print_log_error('Erro ao editar informações do veiculo.')
+
+        except Exception as e:
+            db.rollback()
+            self.logger.error(f'Erro ao atualizar veiculo. {e}')

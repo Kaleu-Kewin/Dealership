@@ -65,18 +65,3 @@ class Clientes():
         except Exception as e:
             db.rollback()
             self.logger.error(f'Erro ao atualizar cliente. {e}')
-
-    @staticmethod
-    def excluir(codigo_cliente: int):
-        db.excluir_por_id('CLIENTES', 'CLI_CODIGO', codigo_cliente)
-
-    @staticmethod
-    def listar():
-        colunas_cliente = ['CÓDIGO', 'NOME', 'CPF', 'E-MAIL', 'TELEFONE', 'DATA DE NASCIMENTO', 'CEP', 'STATUS']
-        indices_cliente = [0, 1, 2, 3, 4, 5, 6, 7]
-
-        db.listar_registros('CLIENTES', colunas_cliente, indices_cliente, 'CLI_CODIGO')
-
-    @staticmethod
-    def buscar(codigo_cliente: int):
-        return db.buscar('CLIENTES', 'CLI_CODIGO', codigo_cliente)

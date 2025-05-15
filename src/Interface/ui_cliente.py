@@ -1,6 +1,7 @@
 from src.utils  import *
 from .ui        import Ui
 from src.models import Clientes
+from src.instances.db_instance import db
 
 class TelaCliente(Ui):
     def __init__(self):
@@ -42,12 +43,15 @@ class TelaCliente(Ui):
         pressione_enter()
 
     def listar_clientes(self):
-        Clientes.listar()
+        colunas_cliente = ['CÓDIGO', 'NOME', 'CPF', 'E-MAIL', 'TELEFONE', 'DATA DE NASCIMENTO', 'CEP', 'STATUS']
+        indices_cliente = [0, 1, 2, 3, 4, 5, 6, 7]
+
+        db.listar_registros('CLIENTES', colunas_cliente, indices_cliente, 'CLI_CODIGO')
         pressione_enter()
 
     def editar_cliente(self):
         codigo_cliente     = perguntar('Digite o código do cliente que deseja alterar')
-        cliente_encontrado = Clientes.buscar(codigo_cliente)
+        cliente_encontrado = db.buscar('CLIENTES', 'CLI_CODIGO', codigo_cliente)
 
         titulo(f'Cliente encontrado: {cliente_encontrado[1]}'.upper())
 
@@ -85,14 +89,14 @@ class TelaCliente(Ui):
 
     def excluir_cliente(self):
         codigo_cliente     = perguntar('Digite o código do cliente que deseja excluir')
-        cliente_encontrado = Clientes.buscar(codigo_cliente)
+        cliente_encontrado = db.buscar('CLIENTES', 'CLI_CODIGO', codigo_cliente)
 
         if cliente_encontrado:
             titulo(f'Cliente encontrado: {cliente_encontrado[1]}'.upper())
             resposta = perguntar('Tem certeza que deseja excluir? [S/N]').strip().lower()
 
             if resposta and resposta[0] == 's':
-                Clientes.excluir(codigo_cliente)
+                db.excluir_por_id('CLIENTES', 'CLI_CODIGO', codigo_cliente)
             else:
                 print('\nExclusão cancelada.')
         else:

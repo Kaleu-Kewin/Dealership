@@ -60,10 +60,61 @@ class TelaVeiculo(Ui):
         pressione_enter()
 
     def editar_veiculo(self):
-        pass
+        codigo_veiculo     = perguntar('Digite o código do veiculo que deseja alterar')
+        veiculo_encontrado = db.buscar('VEICULOS', 'VEI_CODIGO', codigo_veiculo)
+
+        titulo(f'Veiculo encontrado: {veiculo_encontrado[2]}'.upper())
+
+        respostas = [
+            perguntar(f'Modelo atual: {veiculo_encontrado[2]}\n  Novo Modelo:'),
+            perguntar(f'Marca atual: {veiculo_encontrado[1]}\n  Nova Marca:'),
+            perguntar(f'Ano atual: {veiculo_encontrado[3]}\n  Novo Ano:'),
+            perguntar(f'Preço atual: {veiculo_encontrado[4]}\n  Novo Preço:'),
+            selecionar(f'Cor atual: {veiculo_encontrado[5]}\n  Nova cor:', [c.Preto.value, c.Branco.value, c.Vermelho.value, c.Prata.value]),
+            perguntar(f'Quantidade atual: {veiculo_encontrado[6]}\n  Nova Quantidade:'),
+            perguntar(f'Placa atual: {veiculo_encontrado[7]}\n  Nova Placa:'),
+            selecionar(f'Tipo de Veiculo atual: {veiculo_encontrado[8]}\n  Novo Tipo de Veiculo:', [v.CARRO, v.MOTO])
+        ]
+
+        dados = {
+            "modelo"       : respostas[0] or veiculo_encontrado[1],
+            "marca"        : respostas[1] or veiculo_encontrado[2],
+            "ano"          : respostas[2] or veiculo_encontrado[3],
+            "preco"        : respostas[3] or veiculo_encontrado[4],
+            "cor"          : respostas[4] or veiculo_encontrado[5],
+            "quantidade"   : respostas[5] or veiculo_encontrado[6],
+            "placa"        : respostas[6] or veiculo_encontrado[7],
+            "tipo_veiculo" : respostas[7] or veiculo_encontrado[8]
+        }
+
+        classe  = self.obter_veiculo(dados)
+        veiculo = classe(
+            dados["modelo"],
+            dados["marca"],
+            dados["ano"],
+            dados["preco"],
+            dados["cor"],
+            dados["quantidade"],
+            dados["placa"]
+        )
+        veiculo.editar(codigo_veiculo)
+        pressione_enter()
 
     def excluir_veiculo(self):
-        pass
+        codigo_veiculo     = perguntar('Digite o código do veiculo que deseja excluir')
+        veiculo_encontrado = db.buscar('VEICULOS', 'VEI_CODIGO', codigo_veiculo)
+
+        if veiculo_encontrado:
+            titulo(f'Veiculo encontrado: {veiculo_encontrado[1]}'.upper())
+            resposta = selecionar('Tem certeza que deseja excluir?', ['SIM', 'NÃO']).strip().lower()
+
+            if resposta and resposta[0] == 's':
+                db.excluir_por_id('VEICULOS', 'VEI_CODIGO', codigo_veiculo)
+            else:
+                print('\nExclusão cancelada.')
+        else:
+            print('\nVeiculo não encontrado.')
+        pressione_enter()
 
     def exibir(self):
         limpar_terminal()
