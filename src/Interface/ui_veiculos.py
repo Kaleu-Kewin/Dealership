@@ -2,7 +2,7 @@ from src.utils  import *
 from .ui        import Ui
 from src.models import Carro, Moto
 from src.instances.db_instance import db
-from src.Enum   import TipoVeiculo as v, Cores as c
+from src.enums  import TipoVeiculo as v, Cores as c
 
 class TelaVeiculo(Ui):
     def __init__(self):

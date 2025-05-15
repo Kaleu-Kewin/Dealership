@@ -1,5 +1,5 @@
 from src.instances.db_instance import db
-from src.Enum  import Cores, TipoVeiculo
+from src.enums import Cores, TipoVeiculo
 from src.logs  import GerenciadorLogs
 from decimal   import Decimal
 from abc       import ABC

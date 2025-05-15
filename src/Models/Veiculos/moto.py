@@ -1,4 +1,4 @@
-from src.Enum  import TipoVeiculo as t
+from src.enums import TipoVeiculo as t
 from .veiculos import Veiculos, VeiculosDAO
 
 class Moto(Veiculos):

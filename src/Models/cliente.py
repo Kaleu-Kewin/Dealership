@@ -1,5 +1,5 @@
 from ..utils import *
-from ..Enum  import Status
+from ..enums import Status
 from ..logs  import GerenciadorLogs
 from ..instances.db_instance import db
 
